@@ -1,64 +1,36 @@
-import React, { Component } from 'react';
-import './App.css';
+import React from "react";
+import { Route, Link, Switch, BrowserRouter } from "react-router-dom";
+import asyncComponent from "./components/AsyncComponent";
 
-class App extends Component {
-  // Initialize state
-  state = { passwords: [] }
+const AsyncHome = asyncComponent(() => import('./components/Home'));
+const AsyncNotes = asyncComponent(() => import("./components/Notes"));
 
-  // Fetch passwords after first mount
-  componentDidMount() {
-    this.getPasswords();
-  }
-
-  getPasswords = () => {
-    // Get the passwords and store them in state
-    fetch('/api/passwords')
-      .then(res => res.json())
-      .then(passwords => this.setState({ passwords }));
-  }
-
-  render() {
-    const { passwords } = this.state;
-
+export default function App() {
     return (
-      <div className="App">
-        {/* Render the passwords if we have them */}
-        {passwords.length ? (
-          <div>
-            <h1>5 Passwords.</h1>
-            <ul className="passwords">
-              {/*
-                Generally it's bad to use "index" as a key.
-                It's ok for this example because there will always
-                be the same number of passwords, and they never
-                change positions in the array.
-              */}
-              {passwords.map((password, index) =>
-                <li key={index}>
-                  {password}
-                </li>
-              )}
-            </ul>
-            <button
-              className="more"
-              onClick={this.getPasswords}>
-              Get More
-            </button>
-          </div>
-        ) : (
-          // Render a helpful message otherwise
-          <div>
-            <h1>No passwords :(</h1>
-            <button
-              className="more"
-              onClick={this.getPasswords}>
-              Try Again?
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+        <BrowserRouter>
+            <div>
+                <header>
+                    <nav>
+                        <ul>
+                            <li><Link to='/'>Home</Link></li>
+                            <li><Link to='/note'>Note</Link></li>
+                        </ul>
+                    </nav>
+                </header>
+                <Switch>
+                    <Route
+                        path="/"
+                        exact
+                        component={AsyncHome}
+                    />
 
-export default App;
+                    <Route
+                        path="/note"
+                        exact
+                        component={AsyncNotes}
+                    />
+                </Switch>
+            </div>
+        </BrowserRouter>
+    )
+}
