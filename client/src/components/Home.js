@@ -1,3 +1,4 @@
+import Button from '@material-ui/core/Button';
 import React, { Component } from 'react';
 
 export default class Home extends Component {
@@ -26,6 +27,7 @@ export default class Home extends Component {
 
     render() {
         return (
+            <div>
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Email:
@@ -37,6 +39,11 @@ export default class Home extends Component {
                 </label>
                 <input type="submit" value="Submit" />
             </form>
+
+                <Button variant="contained" color="primary">
+                    Hello World
+                </Button>
+            </div>
         );
     }
 }
